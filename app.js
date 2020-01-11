@@ -33,3 +33,38 @@ function createMyDB() {
         db = request.result;
     };
 }
+
+
+function storeAuthor() {
+    //we'll take user entry and store it in the db
+    let authorName = document.getElementById("authorName").value;
+    let authorCountry = document.getElementById("authorCountry").value;
+    let author = {
+        name: authorName,
+        country: authorCountry
+    };
+
+    var request = window.indexedDB.open("articlesDB", 1);
+
+    request.onsuccess = function (event) {    
+        //create db object    
+        var db = request.result;        
+        //create 'transaction' object
+        var myTransaction = db.transaction("authors", "readwrite");
+        //link to the table named 'authors'
+        var authorsStore = myTransaction.objectStore('authors');
+        //create Request Object to add 'author' object to the 'authors' table
+        var addRequest = authorsStore.add(author);
+        
+        addRequest.onsuccess = function (event) {
+            document.body.innerHTML += '<li>New Author ' + i + ' Inserted Successfully.</li>';
+        }
+        addRequest.onerror = function (event) {
+            document.body.innerHTML += '<li>Error: New Author ' + i +' Not Inserted.' + event.target.errorCode + '</li>';
+        }
+    };
+    request.onerror = function (event) {
+        document.body.innerHTML += '<li>Error when opening DB: ' + event.target.errorCode + '</li>';
+    }
+
+}
