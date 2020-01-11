@@ -55,12 +55,12 @@ function storeAuthor() {
         var authorsStore = myTransaction.objectStore('authors');
         //create Request Object to add 'author' object to the 'authors' table
         var addRequest = authorsStore.add(author);
-        
+
         addRequest.onsuccess = function (event) {
-            document.body.innerHTML += '<li>New Author ' + i + ' Inserted Successfully.</li>';
+            document.body.innerHTML += '<li>New Author Inserted Successfully.</li>';
         }
         addRequest.onerror = function (event) {
-            document.body.innerHTML += '<li>Error: New Author ' + i +' Not Inserted.' + event.target.errorCode + '</li>';
+            document.body.innerHTML += '<li>Error: New Author Not Inserted.' + event.target.errorCode + '</li>';
         }
     };
     request.onerror = function (event) {
