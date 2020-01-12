@@ -68,3 +68,8 @@ function storeAuthor() {
     }
 
 }
+
+
+function getAuthorByID(){
+    
+}
