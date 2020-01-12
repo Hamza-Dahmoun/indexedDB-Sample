@@ -71,5 +71,32 @@ function storeAuthor() {
 
 
 function getAuthorByID(){
-    
+    let authorNumber = document.getElementById("authorNumber").value;
+    var request = window.indexedDB.open("articlesDB", 1);
+    request.onsuccess = function (event) {    
+        //create db object    
+        var db = request.result;        
+        //create 'transaction' object
+        var myTransaction = db.transaction("authors", "readwrite");
+        //link to the table named 'authors'
+        var authorsStore = myTransaction.objectStore('authors');
+        //create Request Object to get 'author' object to the 'authors' table
+        var getRequest = authorsStore.get(parseInt(authorNumber));
+
+        getRequest.onsuccess = function (event) {
+            if(event.target.result === undefined){
+                //author not found
+                document.body.innerHTML += '<li>author not found</li>';
+            }
+            else{
+                document.body.innerHTML += '<li> Author Name: ' + event.target.result.name + " - Author Country: " + event.target.result.country +  '</li>' || 'author not found';
+            }                        
+        }
+        getRequest.onerror = function (event) {
+            document.body.innerHTML += '<li>Error: Author Not Fetched. ' + event.target.errorCode + '</li>';
+        }
+    };
+    request.onerror = function (event) {
+        document.body.innerHTML += '<li>Error when opening DB: ' + event.target.errorCode + '</li>';
+    }
 }
